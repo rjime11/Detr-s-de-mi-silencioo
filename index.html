@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171124">
+  <title>Detrás de mi silencio | Escucha sin juzgar</title>
+  <style>
+    :root {
+      --fondo: #171124;
+      --fondo-2: #211832;
+      --panel: #281e3b;
+      --panel-claro: #322447;
+      --lila: #c8a8ff;
+      --lila-claro: #eadfff;
+      --rosa: #f2a9d0;
+      --texto: #f8f4ff;
+      --suave: #c9bddb;
+      --verde: #a9dfc4;
+      --borde: rgba(234, 223, 255, .14);
+      --sombra: 0 18px 50px rgba(0, 0, 0, .24);
+      --radio: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 12% 8%, rgba(119, 73, 171, .18), transparent 34rem),
+        radial-gradient(ellipse at 92% 38%, rgba(190, 94, 148, .10), transparent 28rem),
+        var(--fondo);
+      color: var(--texto);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible { outline: 3px solid var(--rosa); outline-offset: 4px; }
+    .contenedor { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+    .barra {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(23, 17, 36, .88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--borde);
+    }
+    .nav {
+      min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .marca { display: flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: -.03em; }
+    .marca-icono {
+      display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--lila), var(--rosa)); color: #241630; font-size: 21px;
+    }
+    .marca span { display: block; line-height: 1.15; }
+    .marca small { display: block; color: var(--suave); font-size: 10px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; margin-top: 5px; }
+    .enlaces { display: flex; align-items: center; gap: 20px; }
+    .enlaces a { font-size: 13px; color: var(--suave); transition: color .2s; }
+    .enlaces a:hover { color: var(--lila); }
+    .menu-btn {
+      display: none; background: var(--panel); color: var(--texto); border: 1px solid var(--borde);
+      border-radius: 12px; padding: 8px 12px; cursor: pointer;
+    }
+    .boton {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      border: 0; border-radius: 999px; padding: 13px 20px; cursor: pointer; font-weight: 750;
+      transition: transform .2s, filter .2s, background .2s;
+    }
+    .boton:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .boton-principal { color: #241630; background: linear-gradient(110deg, var(--lila), var(--rosa)); }
+    .boton-secundario { color: var(--texto); background: rgba(255,255,255,.04); border: 1px solid var(--borde); }
+    .etiqueta {
+      display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
+      color: var(--lila-claro); background: rgba(200,168,255,.10); border: 1px solid rgba(200,168,255,.22);
+      text-transform: uppercase; font-size: 11px; letter-spacing: .12em; font-weight: 800;
+    }
+    .hero { padding: 86px 0 72px; overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 54px; align-items: center; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(42px, 6vw, 76px); line-height: 1.04; letter-spacing: -.055em; margin: 22px 0; max-width: 720px; }
+    .gradiente { color: var(--lila); background: linear-gradient(100deg, var(--lila), var(--rosa)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { color: var(--suave); max-width: 600px; font-size: 17px; }
+    .acciones { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .micro { margin-top: 22px; color: #a99bbd; font-size: 12px; }
+    .arte-hero {
+      position: relative; min-height: 410px; display: grid; place-items: center; isolation: isolate;
+    }
+    .halo { position: absolute; width: 310px; height: 310px; border-radius: 50%; background: linear-gradient(135deg, rgba(200,168,255,.22), rgba(242,169,208,.13)); filter: blur(2px); }
+    .orbita { position: absolute; width: 360px; height: 360px; border: 1px solid rgba(200,168,255,.28); border-radius: 50%; transform: rotate(-24deg) scaleY(.75); }
+    .orbita::after { content: ""; position: absolute; width: 13px; height: 13px; top: 37px; right: 54px; border-radius: 50%; background: var(--rosa); box-shadow: 0 0 24px var(--rosa); }
+    .tarjeta-cita {
+      position: relative; width: min(330px, 90%); padding: 28px; border: 1px solid rgba(234,223,255,.24);
+      border-radius: 28px; background: linear-gradient(145deg, rgba(50,36,71,.96), rgba(35,25,51,.96)); box-shadow: var(--sombra);
+      transform: rotate(-3deg);
+    }
+    .comillas { color: var(--rosa); font-size: 54px; line-height: .9; font-family: Georgia, serif; }
+    .tarjeta-cita blockquote { font-size: 24px; font-weight: 750; line-height: 1.28; margin: 10px 0 18px; letter-spacing: -.025em; }
+    .tarjeta-cita small { color: var(--suave); }
+    .flotante { position: absolute; border: 1px solid var(--borde); border-radius: 16px; background: #2a203b; padding: 12px 15px; box-shadow: var(--sombra); font-size: 13px; }
+    .flotante.uno { top: 55px; left: 0; color: var(--lila-claro); transform: rotate(-7deg); }
+    .flotante.dos { bottom: 44px; right: -2px; color: #ffd8eb; transform: rotate(5deg); }
+    section { padding: 78px 0; }
+    .seccion-cabecera { max-width: 700px; margin-bottom: 34px; }
+    .seccion-cabecera h2 { font-size: clamp(31px, 4vw, 48px); line-height: 1.12; letter-spacing: -.04em; margin: 15px 0; }
+    .seccion-cabecera p { color: var(--suave); font-size: 16px; margin-bottom: 0; }
+    .centrado { text-align: center; margin-inline: auto; }
+    .rejilla-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .tarjeta {
+      border: 1px solid var(--borde); border-radius: var(--radio); padding: 23px;
+      background: linear-gradient(145deg, rgba(50,36,71,.8), rgba(34,25,49,.8));
+      transition: transform .22s, border-color .22s;
+    }
+    .tarjeta:hover { transform: translateY(-5px); border-color: rgba(200,168,255,.48); }
+    .icono { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 15px; font-size: 23px; margin-bottom: 18px; background: rgba(200,168,255,.13); }
+    .icono.rosa { background: rgba(242,169,208,.13); }
+    .icono.verde { background: rgba(169,223,196,.13); }
+    .tarjeta h3 { font-size: 18px; margin-bottom: 9px; }
+    .tarjeta p { color: var(--suave); font-size: 14px; margin-bottom: 0; }
+    .nota { color: #b8a8ca; font-size: 12px; margin-top: 18px; }
+    .actividad { background: linear-gradient(180deg, rgba(48,33,68,.48), rgba(29,21,43,.18)); border-block: 1px solid var(--borde); }
+    .actividad-caja {
+      display: grid; grid-template-columns: .8fr 1.2fr; gap: 32px; align-items: start;
+      background: rgba(34,25,49,.75); border: 1px solid var(--borde); border-radius: 28px; padding: 28px;
+    }
+    .paso-numero { color: var(--rosa); font-size: 12px; letter-spacing: .15em; font-weight: 800; text-transform: uppercase; }
+    .actividad-caja h3 { font-size: 26px; line-height: 1.2; margin: 10px 0 14px; }
+    .actividad-caja p { color: var(--suave); }
+    .opciones { display: grid; gap: 12px; }
+    .opcion {
+      width: 100%; text-align: left; color: var(--texto); background: #302441; border: 1px solid var(--borde);
+      padding: 16px 18px; border-radius: 16px; cursor: pointer; transition: .2s;
+    }
+    .opcion:hover { border-color: var(--lila); background: #3a2a50; }
+    .opcion.seleccionada { border-color: var(--lila); box-shadow: 0 0 0 2px rgba(200,168,255,.14); }
+    .opcion.correcta { border-color: var(--verde); }
+    .opcion.incorrecta { border-color: var(--rosa); }
+    .respuesta { display: none; margin-top: 15px; padding: 16px; border-radius: 15px; background: rgba(169,223,196,.09); border: 1px solid rgba(169,223,196,.28); color: #d9f8e7; font-size: 14px; }
+    .respuesta.visible { display: block; }
+    .actividad-pie { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+    .progreso { font-size: 12px; color: var(--suave); }
+    .frases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .frase { min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; }
+    .frase .comillas { font-size: 42px; }
+    .frase p { font-size: 20px; font-weight: 700; line-height: 1.35; color: var(--lila-claro); }
+    .frase small { color: var(--suave); }
+    .frase:nth-child(2) p { color: #ffd8eb; }
+    .frase:nth-child(3) p { color: #c9f2dc; }
+    .consejos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .consejo { display: flex; align-items: flex-start; gap: 15px; }
+    .check { flex: 0 0 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; color: #261a36; background: var(--lila); font-weight: 900; }
+    .consejo h3 { margin: 1px 0 5px; font-size: 17px; }
+    .consejo p { color: var(--suave); font-size: 14px; margin: 0; }
+    .cierre { padding: 0 0 84px; }
+    .cierre-caja { padding: clamp(28px, 5vw, 55px); border: 1px solid rgba(200,168,255,.23); border-radius: 28px; text-align: center; background: radial-gradient(circle at top right, rgba(242,169,208,.13), transparent 38%), linear-gradient(135deg, #2d2140, #21172f); }
+    .cierre-caja h2 { font-size: clamp(29px, 4vw, 44px); line-height: 1.15; max-width: 760px; margin: 17px auto; letter-spacing: -.04em; }
+    .cierre-caja p { max-width: 620px; color: var(--suave); margin: 0 auto 25px; }
+    footer { border-top: 1px solid var(--borde); padding: 27px 0; color: #a99bbd; font-size: 12px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .arriba { color: var(--lila); }
+    .toast { position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; padding: 12px 17px; background: #f8f4ff; color: #241630; border-radius: 14px; box-shadow: var(--sombra); z-index: 100; transition: .25s; font-size: 14px; }
+    .toast.visible { opacity: 1; transform: translate(-50%, 0); }
+    .revelar { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+    .revelar.aparece { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      .revelar { opacity: 1; transform: none; }
+    }
+    @media (max-width: 900px) {
+      .enlaces { gap: 12px; }
+      .enlaces a { font-size: 12px; }
+      .hero-grid { gap: 20px; }
+      .rejilla-4 { grid-template-columns: repeat(2, 1fr); }
+      .actividad-caja { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 680px) {
+      .contenedor { width: min(100% - 28px, 540px); }
+      .nav { min-height: 68px; }
+      .menu-btn { display: inline-flex; }
+      .enlaces {
+        display: none; position: absolute; top: 68px; left: 0; right: 0; padding: 18px 22px 22px;
+        background: #1b1429; border-bottom: 1px solid var(--borde); flex-direction: column; align-items: stretch; gap: 0;
+      }
+      .enlaces.abierto { display: flex; }
+      .enlaces a { padding: 11px 0; font-size: 14px; }
+      .hero { padding: 55px 0 38px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero p { font-size: 15px; }
+      .arte-hero { min-height: 350px; margin-top: 8px; }
+      .halo { width: 250px; height: 250px; }
+      .orbita { width: 290px; height: 290px; }
+      .flotante.uno { left: 0; top: 30px; }
+      .flotante.dos { right: 0; bottom: 22px; }
+      section { padding: 58px 0; }
+      .rejilla-4, .frases-grid, .consejos { grid-template-columns: 1fr; }
+      .tarjeta { padding: 20px; }
+      .actividad-caja { padding: 20px; }
+      .cierre { padding-bottom: 58px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="barra" id="arriba">
+    <nav class="nav contenedor" aria-label="Navegación principal">
+      <a class="marca" href="#inicio" aria-label="Detrás de mi silencio, inicio">
+        <span class="marca-icono" aria-hidden="true">♡</span>
+        <span>Detrás de mi silencio<small>Escucha sin juzgar</small></span>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="enlaces">☰ Menú</button>
+      <div class="enlaces" id="enlaces">
+        <a href="#realidad">Lo que no ves</a>
+        <a href="#empatia">Ponte en mis zapatos</a>
+        <a href="#frases">Lo que siento</a>
+        <a href="#ayudar">Cómo ayudar</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="contenedor hero-grid">
+        <div>
+          <span class="etiqueta"> Actividad para concientizar </span>
+          <h1>No conoces mi historia. <span class="gradiente">No juzgues mi manera de sentir.</span></h1>
+          <p>Detrás de cada silencio, cada cambio y cada emoción, puede haber una historia que todavía no conoces. La adolescencia no se trata de exagerar: también es aprender a entender lo que sentimos.</p>
+          <div class="acciones">
+            <a class="boton boton-principal" href="#realidad">Quiero comprender <span aria-hidden="true">→</span></a>
+            <a class="boton boton-secundario" href="#empatia">Vivir una situación</a>
+          </div>
+          <div class="micro">Un espacio de empatía, respeto y escucha para adolescentes y quienes les rodean.</div>
+        </div>
+        <div class="arte-hero" aria-label="Frase destacada sobre la escucha">
+          <div class="halo"></div><div class="orbita"></div>
+          <div class="flotante uno">✦ Tus emociones importan</div>
+          <div class="tarjeta-cita">
+            <div class="comillas" aria-hidden="true">“</div>
+            <blockquote>No necesito que resuelvas todo. A veces solo necesito que me escuches.</blockquote>
+            <small>— Algo que alguien podría necesitar decir</small>
+          </div>
+          <div class="flotante dos">♡ Escuchar también es ayudar</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="realidad">
+      <div class="contenedor">
+        <div class="seccion-cabecera revelar">
+          <span class="etiqueta">01 · Mira más allá</span>
+          <h2>¿Qué hay detrás de lo que ves?</h2>
+          <p>A veces vemos una conducta, pero no conocemos lo que la persona está viviendo. Estas son algunas experiencias que pueden afectar cómo se siente alguien adolescente.</p>
+        </div>
+        <div class="rejilla-4">
+          <article class="tarjeta revelar">
+            <div class="icono">📚</div><h3>Presión escolar</h3>
+            <p>Tareas, exámenes, expectativas y miedo a equivocarse pueden acumularse y provocar estrés.</p>
+          </article>
+          <article class="tarjeta revelar">
+            <div class="icono rosa">💬</div><h3>Rechazo o burlas</h3>
+            <p>Sentirse excluido o recibir comentarios hirientes puede hacer difícil confiar en los demás.</p>
+          </article>
+          <article class="tarjeta revelar">
+            <div class="icono verde">🏠</div><h3>Problemas en casa</h3>
+            <p>Los conflictos familiares o los cambios en el hogar pueden afectar el ánimo y la concentración.</p>
+          </article>
+          <article class="tarjeta revelar">
+            <div class="icono">🌧️</div><h3>Emociones difíciles</h3>
+            <p>A veces cuesta poner en palabras lo que sentimos, incluso cuando queremos que alguien lo entienda.</p>
+          </article>
+        </div>
+        <p class="nota">Importante: no podemos saber qué le pasa a alguien solo por su comportamiento. Lo mejor es acercarnos con respeto y preguntar sin presionar.</p>
+      </div>
+    </section>
+
+    <section class="actividad" id="empatia">
+      <div class="contenedor">
+        <div class="seccion-cabecera revelar">
+          <span class="etiqueta">02 · Actividad interactiva</span>
+          <h2>Ponte en mis zapatos</h2>
+          <p>Lee cada situación y elige cómo responderías. No se trata de adivinar, sino de practicar una forma de escuchar con empatía.</p>
+        </div>
+        <div class="actividad-caja revelar">
+          <div>
+            <div class="paso-numero" id="numeroSituacion">Situación 1 de 3</div>
+            <h3 id="tituloSituacion">Una persona se queda en silencio</h3>
+            <p id="textoSituacion">Últimamente, tu compañero habla menos y prefiere estar solo durante el descanso. No sabes qué está pasando.</p>
+            <p><strong>¿Qué podrías hacer?</strong></p>
+          </div>
+          <div>
+            <div class="opciones" id="opciones"></div>
+            <div class="respuesta" id="respuesta" role="status" aria-live="polite"></div>
+            <div class="actividad-pie">
+              <button class="boton boton-principal" id="siguiente" hidden>Siguiente situación →</button>
+              <button class="boton boton-secundario" id="reiniciar" hidden>Volver a empezar ↻</button>
+              <span class="progreso" id="progreso">Elige una respuesta para continuar.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="frases">
+      <div class="contenedor">
+        <div class="seccion-cabecera revelar">
+          <span class="etiqueta">03 · Palabras que importan</span>
+          <h2>Lo que nunca digo en voz alta</h2>
+          <p>Estas frases son ejemplos ficticios, no testimonios reales. Nos recuerdan que escuchar sin juzgar puede abrir un espacio seguro para hablar.</p>
+        </div>
+        <div class="frases-grid">
+          <article class="tarjeta frase revelar">
+            <div class="comillas" aria-hidden="true">“</div>
+            <p>No necesito que resuelvas todos mis problemas; a veces solo necesito que me escuches.</p>
+            <small>Escuchar también acompaña.</small>
+          </article>
+          <article class="tarjeta frase revelar">
+            <div class="comillas" aria-hidden="true">“</div>
+            <p>Que no sepa explicar lo que siento no significa que no me esté pasando nada.</p>
+            <small>Todas las emociones merecen respeto.</small>
+          </article>
+          <article class="tarjeta frase revelar">
+            <div class="comillas" aria-hidden="true">“</div>
+            <p>Antes de decir que exagero, pregúntame cómo estoy de verdad.</p>
+            <small>La curiosidad puede reemplazar al juicio.</small>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="ayudar">
+      <div class="contenedor">
+        <div class="seccion-cabecera revelar">
+          <span class="etiqueta">04 · Podemos hacer la diferencia</span>
+          <h2>¿Cómo puedo ayudar?</h2>
+          <p>No necesitas tener todas las respuestas. A veces, un gesto sencillo y respetuoso puede hacer que alguien se sienta menos solo.</p>
+        </div>
+        <div class="consejos">
+          <article class="tarjeta consejo revelar">
+            <div class="check">✓</div><div><h3>Escucha sin interrumpir</h3><p>Permite que la otra persona termine de hablar antes de dar consejos o contar tu propia experiencia.</p></div>
+          </article>
+          <article class="tarjeta consejo revelar">
+            <div class="check">✓</div><div><h3>Evita minimizar sus emociones</h3><p>En lugar de “estás exagerando”, intenta decir: “No sé exactamente cómo te sientes, pero quiero escucharte”.</p></div>
+          </article>
+          <article class="tarjeta consejo revelar">
+            <div class="check">✓</div><div><h3>Pregunta qué necesita</h3><p>Puedes preguntar: “¿Quieres que te escuche, que pensemos en una solución o que busquemos ayuda juntos?”.</p></div>
+          </article>
+          <article class="tarjeta consejo revelar">
+            <div class="check">✓</div><div><h3>Respeta sus tiempos</h3><p>No obligues a alguien a contar algo que no quiere compartir. Hazle saber que puede hablar cuando esté listo.</p></div>
+          </article>
+          <article class="tarjeta consejo revelar">
+            <div class="check">✓</div><div><h3>Busca apoyo cuando haga falta</h3><p>Si alguien está pasando por algo que le supera, anímale a hablar con una persona adulta de confianza o un profesional.</p></div>
+          </article>
+          <article class="tarjeta consejo revelar">
+            <div class="check">✓</div><div><h3>Cuida la privacidad</h3><p>No difundas lo que alguien te cuenta ni compartas sus problemas como chisme. La confianza se cuida.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cierre">
+      <div class="contenedor">
+        <div class="cierre-caja revelar">
+          <span class="etiqueta">Una idea para recordar</span>
+          <h2>No somos demasiado sensibles. <span class="gradiente">También estamos aprendiendo a entender lo que sentimos.</span></h2>
+          <p>La adolescencia no se vive igual para todos. Cambiemos los juicios por preguntas, las burlas por respeto y el silencio por espacios donde podamos hablar sin miedo.</p>
+          <a class="boton boton-principal" href="#inicio">Volver al inicio ↑</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="contenedor footer-inner">
+      <span>♡ Detrás de mi silencio · Actividad para concientizar  </span>
+      <span>Hecho por y para adolecentes</span>
+      <a class="arriba" href="#arriba">Volver arriba ↑</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // Menú adaptable para celulares
+    const menuBtn = document.getElementById("menuBtn");
+    const enlaces = document.getElementById("enlaces");
+
+    menuBtn.addEventListener("click", () => {
+      const abierto = enlaces.classList.toggle("abierto");
+      menuBtn.setAttribute("aria-expanded", abierto);
+      menuBtn.textContent = abierto ? "✕ Cerrar" : "☰ Menú";
+    });
+
+    enlaces.querySelectorAll("a").forEach(enlace => {
+      enlace.addEventListener("click", () => {
+        enlaces.classList.remove("abierto");
+        menuBtn.setAttribute("aria-expanded", "false");
+        menuBtn.textContent = "☰ Menú";
+      });
+    });
+
+    // Actividad interactiva: situaciones para practicar empatía
+    const situaciones = [
+      {
+        titulo: "Una persona se queda en silencio",
+        texto: "Últimamente, tu compañero habla menos y prefiere estar solo durante el descanso. No sabes qué está pasando.",
+        opciones: [
+          { texto: "A. Decirle que deje de ser raro y se una al grupo.", buena: false, detalle: "Juzgar su comportamiento puede hacer que se aleje más. No sabemos qué está viviendo." },
+          { texto: "B. Acercarte con respeto y preguntarle cómo está, sin presionarlo.", buena: true, detalle: "¡Exacto! Acercarte con cuidado y escuchar sin exigir explicaciones abre la puerta a una conversación." },
+          { texto: "C. Contar a todos que seguramente tiene un problema.", buena: false, detalle: "Especular o difundir rumores invade su privacidad. Es mejor hablar directamente y con respeto." }
+        ]
+      },
+      {
+        titulo: "Alguien está preocupado por una calificación",
+        texto: "Una amiga está triste porque obtuvo una nota más baja de la que esperaba y teme decepcionar a su familia.",
+        opciones: [
+          { texto: "A. Decirle que no es para tanto y que hay problemas peores.", buena: false, detalle: "Comparar sufrimientos puede hacer que se sienta incomprendida. Cada persona vive sus dificultades de forma distinta." },
+          { texto: "B. Escucharla y preguntarle qué le preocupa más.", buena: true, detalle: "¡Muy bien! Escuchar primero ayuda a entender qué necesita, antes de proponer soluciones." },
+          { texto: "C. Decirle inmediatamente todo lo que hizo mal.", buena: false, detalle: "Aunque quieras ayudar, empezar con críticas puede aumentar su preocupación. Primero escucha y valida cómo se siente." }
+        ]
+      },
+      {
+        titulo: "Alguien te cuenta que se siente excluido",
+        texto: "Un compañero te dice que siente que nadie lo incluye en las actividades del salón.",
+        opciones: [
+          { texto: "A. Responder que seguramente se lo está imaginando.", buena: false, detalle: "No podemos decidir cómo se siente otra persona. Escucha su experiencia sin descartarla." },
+          { texto: "B. Agradecerle que te lo cuente y preguntarle cómo puedes apoyarlo.", buena: true, detalle: "¡Así es! Agradecer su confianza y preguntarle qué necesita demuestra respeto y disposición para ayudar." },
+          { texto: "C. Prometer que solucionarás todo sin preguntarle qué quiere.", buena: false, detalle: "No tienes que resolverlo todo por tu cuenta. Preguntar qué apoyo quiere respeta su autonomía." }
+        ]
+      }
+    ];
+
+    let indice = 0;
+    let respondida = false;
+    const numeroSituacion = document.getElementById("numeroSituacion");
+    const tituloSituacion = document.getElementById("tituloSituacion");
+    const textoSituacion = document.getElementById("textoSituacion");
+    const opciones = document.getElementById("opciones");
+    const respuesta = document.getElementById("respuesta");
+    const siguiente = document.getElementById("siguiente");
+    const reiniciar = document.getElementById("reiniciar");
+    const progreso = document.getElementById("progreso");
+
+    function mostrarSituacion() {
+      const situacion = situaciones[indice];
+      respondida = false;
+      numeroSituacion.textContent = `Situación ${indice + 1} de ${situaciones.length}`;
+      tituloSituacion.textContent = situacion.titulo;
+      textoSituacion.textContent = situacion.texto;
+      opciones.innerHTML = "";
+      respuesta.textContent = "";
+      respuesta.classList.remove("visible");
+      siguiente.hidden = true;
+      reiniciar.hidden = true;
+      progreso.textContent = "Elige una respuesta para continuar.";
+
+      situacion.opciones.forEach((opcion, i) => {
+        const boton = document.createElement("button");
+        boton.className = "opcion";
+        boton.type = "button";
+        boton.textContent = opcion.texto;
+        boton.addEventListener("click", () => elegirOpcion(i, boton));
+        opciones.appendChild(boton);
+      });
+    }
+
+    function elegirOpcion(opcionIndice, botonElegido) {
+      if (respondida) return;
+      respondida = true;
+      const situacion = situaciones[indice];
+      const opcion = situacion.opciones[opcionIndice];
+      const botones = opciones.querySelectorAll(".opcion");
+
+      botones.forEach((boton, i) => {
+        boton.disabled = true;
+        if (situacion.opciones[i].buena) boton.classList.add("correcta");
+      });
+      if (!opcion.buena) botonElegido.classList.add("incorrecta");
+
+      respuesta.textContent = (opcion.buena ? "¡Buena elección! " : "Reflexionemos: ") + opcion.detalle;
+      respuesta.classList.add("visible");
+      progreso.textContent = opcion.buena ? "Respuesta empática 💜" : "Puedes intentarlo de otra manera la próxima vez.";
+      if (indice < situaciones.length - 1) siguiente.hidden = false;
+      else reiniciar.hidden = false;
+    }
+
+    siguiente.addEventListener("click", () => {
+      if (indice < situaciones.length - 1) {
+        indice++;
+        mostrarSituacion();
+      }
+    });
+
+    reiniciar.addEventListener("click", () => {
+      indice = 0;
+      mostrarSituacion();
+      document.getElementById("empatia").scrollIntoView({ behavior: "smooth" });
+    });
+
+    mostrarSituacion();
+
+    // Aparición suave de las tarjetas al llegar a ellas
+    const elementos = document.querySelectorAll(".revelar");
+    if ("IntersectionObserver" in window) {
+      const observador = new IntersectionObserver((entradas, observer) => {
+        entradas.forEach(entrada => {
+          if (entrada.isIntersecting) {
+            entrada.target.classList.add("aparece");
+            observer.unobserve(entrada.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      elementos.forEach(elemento => observador.observe(elemento));
+    } else {
+      elementos.forEach(elemento => elemento.classList.add("aparece"));
+    }
+  </script>
+</body>
+</html>
